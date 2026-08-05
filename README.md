@@ -9,7 +9,7 @@ This repository contains the shared Docker Compose setup for local development o
 
 ## Getting Started
 
-1. **Clone the workspace** using the Albedo manifest (see `albedo-manifest` repo). This will checkout all repositories including this one at `infrastructure/`.
+1. **Clone the workspace** using the Albedo manifest (see the `albedo-manifest` repo). This checks out the auth source alongside this repository at `backend/auth/`, which is required by the compose build context.
 
 2. **Environment variables**:  
    Copy `.env.example` to `.env` and adjust values as needed for your local environment.
@@ -51,9 +51,8 @@ This repository contains the shared Docker Compose setup for local development o
 ## Notes
 
 - The auth-api build context is set to `../backend/auth`, meaning the source code is consumed from the sibling `backend/auth` repository. This keeps the Docker Compose file outside of the auth repo, allowing multiple services to share the same infrastructure.
-- Do not commit actual passwords to `.env`; keep it local and add to `.gitignore` (already ignored via the template? ensure .gitignore includes `.env`).
+- Compose reads configuration from a local `.env` file when present; `.env.example` provides safe development defaults. Never commit actual passwords.
 
 ## License
 
 See the [LICENSE](../LICENSE) file (if applicable) or assume MIT.
-
