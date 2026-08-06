@@ -27,3 +27,32 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  novels-api:
+    build:
+      context: ../backend/novels
+      dockerfile: Dockerfile
+    image: albedo-novels-api:local
+    container_name: novels-api
+    restart: unless-stopped
+    ports:
+      - "${NOVELS_HOST_PORT:-8000}:${NOVELS_CONTAINER_PORT:-8000}"
+    environment:
+      HOST: 0.0.0.0
+      PORT: ${NOVELS_CONTAINER_PORT:-8000}
+      AUTH_ISSUER: ${AUTH_ISSUER:-http://auth-api:8080}
+      AUTH_AUDIENCE: ${AUTH_AUDIENCE:-albedo-novel-service}
+      AUTH_JWKS_URL: ${AUTH_JWKS_URL:-http://auth-api:8080/oauth2/jwks}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      auth-api:
+        condition: service_started
+    healthcheck:
+      # The local FastAPI server only requires a bearer token for non-/health
+      # routes, so we can probe the unauthenticated health endpoint directly.
+      test: ["CMD", "python", "-c", "import urllib.request,sys; r=urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2); sys.exit(0 if r.status==200 else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
