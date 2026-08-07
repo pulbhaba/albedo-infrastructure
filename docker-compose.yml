@@ -40,8 +40,8 @@ services:
     environment:
       HOST: 0.0.0.0
       PORT: ${NOVELS_CONTAINER_PORT:-8000}
-      AUTH_ISSUER: ${AUTH_ISSUER:-http://auth-api:8080}
-      AUTH_AUDIENCE: ${AUTH_AUDIENCE:-albedo-novel-service}
+      AUTH_ISSUER: ${AUTH_ISSUER:-http://localhost:8080}
+      AUTH_AUDIENCE: ${AUTH_AUDIENCE:-albedo-client}
       AUTH_JWKS_URL: ${AUTH_JWKS_URL:-http://auth-api:8080/oauth2/jwks}
     depends_on:
       mysql:
