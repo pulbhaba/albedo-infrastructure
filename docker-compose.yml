@@ -43,6 +43,9 @@ services:
       AUTH_ISSUER: ${AUTH_ISSUER:-http://localhost:8080}
       AUTH_AUDIENCE: ${AUTH_AUDIENCE:-albedo-client}
       AUTH_JWKS_URL: ${AUTH_JWKS_URL:-http://auth-api:8080/oauth2/jwks}
+      NOVELS_CHAPTER_CONTENT_DIR: ${NOVELS_CHAPTER_CONTENT_DIR:-/var/lib/albedo/novels/chapter-content}
+    volumes:
+      - novels-chapter-content:${NOVELS_CHAPTER_CONTENT_DIR:-/var/lib/albedo/novels/chapter-content}
     depends_on:
       mysql:
         condition: service_healthy
@@ -56,3 +59,6 @@ services:
       timeout: 5s
       retries: 12
       start_period: 15s
+
+volumes:
+  novels-chapter-content:
